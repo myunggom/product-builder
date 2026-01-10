@@ -4,110 +4,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggleBtn = document.getElementById('theme-toggle');
     const body = document.body;
 
-    // --- Menu Data with Static Image URLs ---
-    // Manually curated images to ensure accuracy (Replacing AI generation)
-    // Sources: Pixabay, Wikimedia Commons, Unsplash (Public Domain / Free to use)
+    // --- Menu Data with Detailed AI Prompts ---
+    // Using detailed English prompts for better AI generation
     const menus = [
-        { 
-            name: '삼겹살', 
-            category: '한식', 
-            img: 'https://cdn.pixabay.com/photo/2017/08/08/09/44/food-2610863_1280.jpg' 
-        },
-        { 
-            name: '치킨', 
-            category: '한식/양식', 
-            img: 'https://cdn.pixabay.com/photo/2019/09/26/18/23/republic-of-korea-4506696_1280.jpg' 
-        },
-        { 
-            name: '피자', 
-            category: '양식', 
-            img: 'https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_1280.jpg' 
-        },
-        { 
-            name: '김치찌개', 
-            category: '한식', 
-            img: 'https://cdn.pixabay.com/photo/2021/08/25/16/04/kimchi-stew-6573887_1280.jpg' 
-        },
-        { 
-            name: '초밥', 
-            category: '일식', 
-            img: 'https://cdn.pixabay.com/photo/2016/11/25/16/08/sushi-1858696_1280.jpg' 
-        },
-        { 
-            name: '떡볶이', 
-            category: '분식', 
-            img: 'https://cdn.pixabay.com/photo/2016/04/05/09/16/korean-food-1309138_1280.jpg' 
-        },
-        { 
-            name: '짜장면', 
-            category: '중식', 
-            img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Jajangmyeon.jpg/640px-Jajangmyeon.jpg' 
-        },
-        { 
-            name: '햄버거', 
-            category: '양식', 
-            img: 'https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_1280.jpg' 
-        },
-        { 
-            name: '파스타', 
-            category: '양식', 
-            img: 'https://cdn.pixabay.com/photo/2016/08/19/09/24/spaghetti-1604836_1280.jpg' 
-        },
-        { 
-            name: '된장찌개', 
-            category: '한식', 
-            img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Doenjang_jjigae.jpg/640px-Doenjang_jjigae.jpg' 
-        },
-        { 
-            name: '족발', 
-            category: '한식', 
-            img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jokbal.jpg/640px-Jokbal.jpg' 
-        },
-        { 
-            name: '쌀국수', 
-            category: '아시안', 
-            img: 'https://cdn.pixabay.com/photo/2019/04/02/10/47/pho-4097148_1280.jpg' 
-        },
-        { 
-            name: '마라탕', 
-            category: '중식', 
-            img: 'https://cdn.pixabay.com/photo/2021/11/01/16/00/malatang-6760867_1280.jpg' 
-        },
-        { 
-            name: '칼국수', 
-            category: '한식', 
-            img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Kalguksu.jpg/640px-Kalguksu.jpg' 
-        },
-        { 
-            name: '비빔밥', 
-            category: '한식', 
-            img: 'https://cdn.pixabay.com/photo/2017/08/08/09/44/food-2610863_1280.jpg' 
-        },
-        { 
-            name: '스테이크', 
-            category: '양식', 
-            img: 'https://cdn.pixabay.com/photo/2017/03/23/19/57/steak-2169317_1280.jpg' 
-        },
-        { 
-            name: '돈가스', 
-            category: '일식/양식', 
-            img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Tonkatsu_by_fame0101_in_Tokyo.jpg/640px-Tonkatsu_by_fame0101_in_Tokyo.jpg' 
-        },
-        { 
-            name: '라면', 
-            category: '분식', 
-            img: 'https://cdn.pixabay.com/photo/2017/02/19/18/39/ramen-2080756_1280.jpg' 
-        },
-        { 
-            name: '샌드위치', 
-            category: '양식', 
-            img: 'https://cdn.pixabay.com/photo/2016/03/05/19/08/sandwich-1238253_1280.jpg' 
-        },
-        { 
-            name: '불고기', 
-            category: '한식', 
-            img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Bulgogi.jpg/640px-Bulgogi.jpg' 
-        }
+        { name: '삼겹살', category: '한식', keyword: 'korean grilled pork belly samgyeopsal bbq with lettuce and garlic photorealistic delicious food' },
+        { name: '치킨', category: '한식/양식', keyword: 'korean crispy fried chicken glazed with spicy sauce delicious food photography' },
+        { name: '피자', category: '양식', keyword: 'delicious pepperoni pizza with melted cheese high quality food photography' },
+        { name: '김치찌개', category: '한식', keyword: 'korean kimchi stew jjigae in a black pot spicy red soup boiling delicious' },
+        { name: '초밥', category: '일식', keyword: 'assorted sushi platter on wooden board fresh salmon tuna delicious food' },
+        { name: '떡볶이', category: '분식', keyword: 'korean spicy rice cake tteokbokki red sauce delicious street food' },
+        { name: '짜장면', category: '중식', keyword: 'korean black bean noodles jajangmyeon with cucumber garnish delicious' },
+        { name: '햄버거', category: '양식', keyword: 'juicy cheeseburger with lettuce tomato and fries high quality food photography' },
+        { name: '파스타', category: '양식', keyword: 'creamy carbonara pasta with bacon and parmesan cheese delicious food' },
+        { name: '된장찌개', category: '한식', keyword: 'korean soybean paste stew doenjang-jjigae with tofu and zucchini' },
+        { name: '족발', category: '한식', keyword: 'korean braised pig trotters jokbal sliced on a plate delicious' },
+        { name: '쌀국수', category: '아시안', keyword: 'vietnamese pho noodle soup with beef and herbs delicious' },
+        { name: '마라탕', category: '중식', keyword: 'spicy malatang soup with vegetables and noodles chinese food' },
+        { name: '칼국수', category: '한식', keyword: 'korean handmade noodle soup kalguksu with clams delicious' },
+        { name: '비빔밥', category: '한식', keyword: 'korean bibimbap mixed rice with vegetables and egg in stone bowl' },
+        { name: '스테이크', category: '양식', keyword: 'grilled ribeye steak medium rare with rosemary and roasted garlic' },
+        { name: '돈가스', category: '일식/양식', keyword: 'golden crispy pork cutlet tonkatsu with shredded cabbage delicious' },
+        { name: '라면', category: '분식', keyword: 'korean spicy ramen noodles with egg and green onion delicious' },
+        { name: '샌드위치', category: '양식', keyword: 'fresh blt sandwich with toasted bread lettuce tomato bacon' },
+        { name: '불고기', category: '한식', keyword: 'korean marinated beef bulgogi bbq with onions and carrots delicious' }
     ];
 
     // --- Dark Mode Logic ---
@@ -142,8 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const menuCard = document.createElement('div');
         menuCard.className = 'menu-card';
 
-        // Image (Direct Link)
-        const imgUrl = menu.img;
+        // Image (AI Generated via Pollinations with Flux model)
+        // Using 'flux' model for high realism
+        const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(menu.keyword)}?width=600&height=400&model=flux&nologo=true&seed=${Math.random()}`;
 
         const img = document.createElement('img');
         img.src = imgUrl;
@@ -154,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.style.opacity = '0';
         img.onload = () => { img.style.opacity = '1'; img.style.transition = 'opacity 0.3s'; };
         img.onerror = () => { 
-            img.src = 'https://via.placeholder.com/300x200?text=No+Image'; // Fallback
+            img.src = 'https://via.placeholder.com/300x200?text=Image+Generation+Failed'; 
         };
 
         // Text Info
