@@ -1,5 +1,5 @@
 :root {
-2    --primary-color: #4a90e2;
+    --primary-color: #4a90e2;
     --bg-color: #f4f7f6;
     --card-bg: #ffffff;
     --text-main: #333333;
@@ -140,6 +140,15 @@ header p {
 .generate-btn:active {
     transform: scale(0.97);
     box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+}
+
+/* Clock Style */
+.clock {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: var(--text-sub);
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 footer {

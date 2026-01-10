@@ -71,4 +71,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. 버튼 이벤트 바인딩
     generateBtn.addEventListener('click', displayLotto);
+
+    // 5. 시계 기능
+    function updateClock() {
+        const now = new Date();
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            weekday: 'short', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: false
+        };
+        const timeString = now.toLocaleString('ko-KR', options);
+        document.getElementById('clock').innerText = timeString;
+    }
+    
+    // 초기 실행 및 1초마다 갱신
+    updateClock();
+    setInterval(updateClock, 1000);
 });
