@@ -314,4 +314,57 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.retryBtn.addEventListener('click', () => {
         window.location.href = window.location.pathname; // Hard reset
     });
+
+    // --- Save as Image ---
+    const saveBtn = document.getElementById('save-img-btn');
+    saveBtn.addEventListener('click', () => {
+        // Simple and robust: Use browser's print to PDF/Save feature or Canvas export
+        // For mobile compatibility, html2canvas is heavy. 
+        // Let's try to export the Chart + Text as an image using html2canvas if available, 
+        // otherwise fallback to Chart image download.
+        
+        // Since I haven't added html2canvas yet, I will use a simple Chart download for now
+        // and guide the user.
+        
+        // UPDATE: I will inject html2canvas dynamically to ensure it works.
+        const script = document.createElement('script');
+        script.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js";
+        script.onload = () => {
+            const target = document.querySelector('.container');
+            html2canvas(target).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'hexaco_result.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        };
+        document.head.appendChild(script);
+    });
+
+    // --- Dark Mode ---
+    const themeBtn = document.getElementById('theme-toggle');
+    const body = document.body;
+    
+    // Check saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        body.classList.add('dark-mode'); // Note: style.css uses media query, but class override is better for manual toggle
+        // We need to add a manual class support in CSS or just rely on system?
+        // Let's force a class 'dark-theme' and update CSS to respect it.
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeBtn.innerText = '☀️';
+    }
+
+    themeBtn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        if (current === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeBtn.innerText = '🌙';
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeBtn.innerText = '☀️';
+            localStorage.setItem('theme', 'dark');
+        }
+    });
 });

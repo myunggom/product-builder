@@ -2,7 +2,7 @@
     --primary-color: #6c5ce7;
     --primary-hover: #5649c0;
     --secondary-color: #a29bfe;
-    --accent-color: #fd79a8; /* For comparison/friend data */
+    --accent-color: #fd79a8; 
     --bg-color: #f8f9fa;
     --card-bg: #ffffff;
     --text-main: #2d3436;
@@ -11,8 +11,20 @@
     --shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
+/* Dark Mode via Attribute (Manual Toggle) or Media Query (Default) */
+[data-theme="dark"] {
+    --primary-color: #8c7ae6;
+    --secondary-color: #a29bfe;
+    --accent-color: #ff7675;
+    --bg-color: #1e1e2e;
+    --card-bg: #2d2d44;
+    --text-main: #f5f6fa;
+    --text-sub: #b2bec3;
+    --shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         --primary-color: #8c7ae6;
         --secondary-color: #a29bfe;
         --accent-color: #ff7675;
@@ -54,6 +66,12 @@ body {
     position: relative;
     transition: background-color 0.3s;
     margin-bottom: 20px;
+}
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .container { padding: 30px 20px; }
+    h1 { font-size: 1.6rem; }
+    .primary-btn { padding: 14px; font-size: 0.95rem; }
 }
 
 .screen {
