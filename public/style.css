@@ -2,6 +2,7 @@
     --primary-color: #6c5ce7;
     --primary-hover: #5649c0;
     --secondary-color: #a29bfe;
+    --accent-color: #fd79a8; /* For comparison/friend data */
     --bg-color: #f8f9fa;
     --card-bg: #ffffff;
     --text-main: #2d3436;
@@ -13,6 +14,8 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --primary-color: #8c7ae6;
+        --secondary-color: #a29bfe;
+        --accent-color: #ff7675;
         --bg-color: #1e1e2e;
         --card-bg: #2d2d44;
         --text-main: #f5f6fa;
@@ -41,7 +44,7 @@ body {
 .container {
     background: var(--card-bg);
     width: 100%;
-    max-width: 600px; /* 넓이 확장 */
+    max-width: 600px;
     min-height: 600px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -49,7 +52,6 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    /* overflow: hidden; Removed for scrolling long results */
     transition: background-color 0.3s;
     margin-bottom: 20px;
 }
@@ -58,7 +60,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Changed for long content */
+    justify-content: flex-start;
     height: 100%;
     flex: 1;
     animation: fadeIn 0.4s ease-out;
@@ -75,9 +77,7 @@ body {
 }
 
 /* Intro Screen */
-#intro-screen {
-    justify-content: center; /* Intro는 중앙 정렬 */
-}
+#intro-screen { justify-content: center; }
 
 header {
     text-align: center;
@@ -114,7 +114,7 @@ p {
 }
 
 /* Buttons */
-.primary-btn, .secondary-btn, .option-btn {
+.primary-btn, .secondary-btn, .option-btn, .compare-btn {
     width: 100%;
     padding: 16px;
     border: none;
@@ -130,7 +130,6 @@ p {
     color: white;
     box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
 }
-
 .primary-btn:active { transform: scale(0.98); }
 
 .secondary-btn {
@@ -140,10 +139,17 @@ p {
     margin-top: 10px;
 }
 
-/* Quiz Screen */
-#quiz-screen {
-    justify-content: center;
+/* Compare Button Special Style */
+.compare-btn {
+    background: linear-gradient(135deg, #fd79a8, #e84393);
+    color: white;
+    box-shadow: 0 4px 15px rgba(232, 67, 147, 0.3);
+    margin-bottom: 10px;
 }
+.compare-btn:active { transform: scale(0.98); }
+
+/* Quiz Screen */
+#quiz-screen { justify-content: center; }
 
 .progress-bar {
     width: 100%;
@@ -188,13 +194,12 @@ p {
     text-align: left;
     padding: 15px 20px;
 }
-
 .option-btn:hover {
     background-color: var(--secondary-color);
     color: white;
 }
 
-/* Result Screen - Detailed for AdSense */
+/* Result Screen */
 .chart-container {
     width: 100%;
     max-width: 400px;
@@ -224,11 +229,6 @@ p {
     justify-content: space-between;
 }
 
-.result-section p {
-    font-size: 0.95rem;
-    margin-bottom: 0;
-}
-
 .score-badge {
     font-size: 0.9rem;
     background: var(--card-bg);
@@ -241,6 +241,9 @@ p {
 .action-buttons {
     width: 100%;
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 /* Footer Link */
@@ -249,8 +252,4 @@ footer {
     text-align: center;
     font-size: 0.8rem;
 }
-
-footer a {
-    color: var(--text-sub);
-    text-decoration: none;
-}
+footer a { color: var(--text-sub); text-decoration: none; }
