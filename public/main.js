@@ -167,34 +167,76 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.resultDetail.innerHTML = '';
         const keys = ['H', 'E', 'X', 'A', 'C', 'O'];
         
-        // Calculate Compatibility (Simple Logic: Difference)
+        // Calculate Compatibility
         let totalDiff = 0;
         keys.forEach(k => totalDiff += Math.abs(myScores[k] - friendScores[k]));
-        const matchRate = Math.max(0, 100 - (totalDiff * 2)); // Rough calculation
+        const matchRate = Math.max(0, 100 - (totalDiff * 2)); 
         
         const summary = document.createElement('div');
         summary.className = 'result-section';
-        summary.style.background = '#e84393';
+        summary.style.background = 'linear-gradient(135deg, #fd79a8, #e84393)';
         summary.style.color = 'white';
-        summary.innerHTML = `<h3 style="color:white">💖 우리 궁합 점수: ${Math.round(matchRate)}점</h3><p>점수가 높을수록 성격이 비슷해요!</p>`;
+        summary.innerHTML = `<h3 style="color:white; margin-bottom:5px;">💖 우리 궁합 점수: ${Math.round(matchRate)}점</h3><p>두 분의 성격 케미를 분석해봤어요!</p>`;
         ui.resultDetail.appendChild(summary);
 
-        // Details
+        // Comparison Insights Logic
+        const insights = {
+            H: { // Honesty-Humility
+                similar: "두 분 다 정직함과 겸손함을 중요하게 생각하네요. 신뢰를 바탕으로 한 깊은 관계가 가능합니다.",
+                hostHigh: "초대한 친구는 원칙을 중요시하는 반면, 초대받은 친구는 융통성을 발휘하는 편이에요. 서로의 고지식함을 풀어주고 이익을 챙겨주는 좋은 파트너가 될 수 있어요.",
+                guestHigh: "초대받은 친구는 원칙주의자이고, 초대한 친구는 실리를 추구하는 편이네요. 서로의 부족한 점을 보완해줄 수 있는 관계입니다."
+            },
+            E: { // Emotionality
+                similar: "감정의 온도가 비슷해요. 서로가 언제 힘들어하고 언제 기뻐하는지 누구보다 잘 이해해줄 거예요.",
+                hostHigh: "초대한 친구는 감수성이 풍부하고, 초대받은 친구는 덤덤한 편이에요. 초대한 친구가 힘들 때 초대받은 친구가 든든한 버팀목이 되어줄 수 있어요.",
+                guestHigh: "초대받은 친구는 감정이 풍부하고, 초대한 친구는 침착해요. 초대받은 친구의 고민을 초대한 친구가 이성적으로 잘 들어줄 수 있겠네요."
+            },
+            X: { // Extraversion
+                similar: "에너지 레벨이 딱 맞아요! 함께 놀 때도, 쉴 때도 템포가 잘 맞아서 편안한 관계입니다.",
+                hostHigh: "초대한 친구는 인싸 재질! 초대받은 친구를 즐거운 모임으로 이끌어줄 수 있어요. 반대로 조용한 휴식이 필요할 땐 초대받은 친구가 쉼터가 되어주겠죠.",
+                guestHigh: "초대받은 친구가 분위기 메이커군요! 초대한 친구를 리드해주고, 초대한 친구는 묵묵히 따라주며 균형을 맞추는 환상의 짝꿍입니다."
+            },
+            A: { // Agreeableness
+                similar: "갈등 해결 방식이 비슷해요. 싸울 일이 별로 없거나, 싸워도 금방 화해하는 평화로운 사이입니다.",
+                hostHigh: "초대한 친구는 다 받아주는 천사표네요. 초대받은 친구가 가끔 욱해도 초대한 친구가 잘 넘겨주며 관계를 유지할 가능성이 높아요.",
+                guestHigh: "초대받은 친구가 마음이 넓군요. 초대한 친구가 고집을 부려도 초대받은 친구가 웃으며 이해해주는 훈훈한 관계가 예상됩니다."
+            },
+            C: { // Conscientiousness
+                similar: "일 처리 스타일이 비슷해서 함께 여행을 가거나 프로젝트를 해도 트러블이 적을 거예요.",
+                hostHigh: "초대한 친구는 계획파, 초대받은 친구는 즉흥파! 초대한 친구가 꼼꼼하게 챙겨주면, 초대받은 친구는 의외의 즐거움을 더해주는 시너지가 있어요.",
+                guestHigh: "초대받은 친구가 계획을 세우면, 초대한 친구는 유연하게 따라가는 편이군요. 서로의 답답함과 불안함을 해소해줄 수 있는 조합입니다."
+            },
+            O: { // Openness
+                similar: "관심사가 통하는 영혼의 단짝! 새로운 것을 함께 시도하거나 대화하는 것이 시간 가는 줄 모르게 즐거울 거예요.",
+                hostHigh: "초대한 친구는 몽상가, 초대받은 친구는 현실가. 초대한 친구의 엉뚱한 아이디어를 초대받은 친구가 현실로 만들어줄 수 있어요.",
+                guestHigh: "초대받은 친구는 호기심 대장! 초대한 친구에게 새로운 세상을 보여주고, 초대한 친구는 안정감을 주는 조화로운 관계입니다."
+            }
+        };
+
         keys.forEach(key => {
-            const myS = myScores[key];
-            const friendS = friendScores[key];
-            const diff = myS - friendS;
-            let comment = "";
+            const myS = myScores[key]; // Guest (Current User)
+            const friendS = friendScores[key]; // Host (Inviter)
+            const diff = myS - friendS; // Positive: Guest Higher, Negative: Host Higher
             
-            if (Math.abs(diff) < 4) comment = "두 분은 이 점이 아주 비슷해요! 통하는 게 많겠네요.";
-            else if (diff > 0) comment = "당신이 더 높은 편이에요.";
-            else comment = "친구가 더 높은 편이에요.";
+            let insightText = "";
+            let titleText = "";
+
+            if (Math.abs(diff) < 5) {
+                titleText = `${interpretations[key].title}: 🤝 찰떡궁합!`;
+                insightText = insights[key].similar;
+            } else if (diff < 0) { // Friend (Host) is higher
+                titleText = `${interpretations[key].title}: 친구가 더 높아요`;
+                insightText = insights[key].hostHigh;
+            } else { // Me (Guest) is higher
+                titleText = `${interpretations[key].title}: 내가 더 높아요`;
+                insightText = insights[key].guestHigh;
+            }
 
             const div = document.createElement('div');
             div.className = 'result-section';
             div.innerHTML = `
-                <h3>${interpretations[key].title}</h3>
-                <p>나: ${myS}점 vs 친구: ${friendS}점<br>👉 ${comment}</p>
+                <h3 style="font-size:1.1rem">${titleText}</h3>
+                <p style="margin-top:5px; color:#555;">${insightText}</p>
             `;
             ui.resultDetail.appendChild(div);
         });
