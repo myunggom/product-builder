@@ -117,4 +117,81 @@ document.addEventListener('DOMContentLoaded', () => {
     
     updateClock();
     setInterval(updateClock, 1000);
+
+    // --- Custom Comment System (Local Storage) ---
+    const commentForm = {
+        username: document.getElementById('username'),
+        text: document.getElementById('comment-text'),
+        submitBtn: document.getElementById('submit-comment'),
+        list: document.getElementById('comment-list'),
+        count: document.getElementById('comment-count')
+    };
+
+    // Load comments from LocalStorage
+    let comments = JSON.parse(localStorage.getItem('dinner_comments')) || [];
+
+    function renderComments() {
+        commentForm.list.innerHTML = '';
+        commentForm.count.textContent = comments.length;
+
+        if (comments.length === 0) {
+            commentForm.list.innerHTML = '<div class="empty-message">첫 번째 댓글을 남겨보세요!</div>';
+            return;
+        }
+
+        // Sort by newest first
+        const sortedComments = [...comments].reverse();
+
+        sortedComments.forEach(comment => {
+            const el = document.createElement('div');
+            el.className = 'comment-item';
+            
+            // Random Emoji Avatar based on name length
+            const emojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯'];
+            const avatarEmoji = emojis[comment.username.length % emojis.length];
+
+            el.innerHTML = `
+                <div class="comment-avatar">${avatarEmoji}</div>
+                <div class="comment-content">
+                    <div class="comment-author">
+                        ${comment.username}
+                        <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
+                    </div>
+                    <div class="comment-text">${comment.text}</div>
+                </div>
+            `;
+            commentForm.list.appendChild(el);
+        });
+    }
+
+    function addComment() {
+        const username = commentForm.username.value.trim();
+        const text = commentForm.text.value.trim();
+
+        if (!username || !text) {
+            alert('이름과 내용을 모두 입력해주세요.');
+            return;
+        }
+
+        const newComment = {
+            id: Date.now(),
+            username: username,
+            text: text,
+            date: new Date().toISOString()
+        };
+
+        comments.push(newComment);
+        localStorage.setItem('dinner_comments', JSON.stringify(comments));
+        
+        // Reset form
+        commentForm.username.value = '';
+        commentForm.text.value = '';
+        
+        renderComments();
+    }
+
+    commentForm.submitBtn.addEventListener('click', addComment);
+    
+    // Initial Render
+    renderComments();
 });
