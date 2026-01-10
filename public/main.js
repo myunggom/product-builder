@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const ui = {
         startBtn: document.getElementById('start-btn'),
+        enterLinkBtn: document.getElementById('enter-link-btn'), // New button
         progressFill: document.getElementById('progress-fill'),
         qNumber: document.getElementById('question-number'),
         qText: document.getElementById('question-text'),
@@ -84,6 +85,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 finishQuiz(true); // Skip straight to result
             } catch(e) {}
         }
+    }
+
+    // --- Manual Link Entry Logic ---
+    if (ui.enterLinkBtn) {
+        ui.enterLinkBtn.addEventListener('click', () => {
+            const input = prompt("친구가 공유한 결과 링크(초대장)를 붙여넣으세요:");
+            if (!input) return;
+
+            try {
+                const url = new URL(input);
+                const hostParam = url.searchParams.get('host');
+                const dataParam = url.searchParams.get('data');
+                
+                // If it's an invite link (?host=...) or just a result link (?data=...)
+                // We treat both as "Friend's data" to compare against.
+                const targetData = hostParam || dataParam;
+
+                if (targetData) {
+                    friendScores = JSON.parse(atob(targetData));
+                    alert("친구의 데이터를 불러왔습니다! \n이제 '진단 시작하기'를 눌러 나의 성격을 테스트하고 비교해보세요.");
+                    
+                    // Update UI to show we are in comparison mode
+                    ui.introHeader.innerHTML = `
+                        <h1>⚔️ 성격 비교 챌린지</h1>
+                        <p>친구(입력됨)와 비교 모드입니다.<br>진단을 시작하여 궁합을 확인하세요!</p>
+                    `;
+                    ui.startBtn.innerText = "대결 시작하기";
+                    ui.enterLinkBtn.style.display = 'none'; // Hide after success
+                } else {
+                    alert("유효하지 않은 링크입니다. 링크를 다시 확인해주세요.");
+                }
+            } catch (e) {
+                alert("링크 형식이 올바르지 않습니다.");
+            }
+        });
     }
 
     // --- Navigation ---
