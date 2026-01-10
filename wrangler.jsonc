@@ -1,0 +1,8 @@
+{
+  "name": "product-builder",
+  "compatibility_date": "2026-01-10",
+  "assets": {
+    "directory": "public",
+    "binding": "ASSETS"
+  }
+}
