@@ -1,197 +1,185 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const generateBtn = document.getElementById('generate-btn');
-    const resultContainer = document.getElementById('result-container');
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const body = document.body;
-
-    // --- Menu Data with Detailed AI Prompts ---
-    // Using detailed English prompts for better AI generation
-    const menus = [
-        { name: '삼겹살', category: '한식', keyword: 'korean grilled pork belly samgyeopsal bbq with lettuce and garlic photorealistic delicious food' },
-        { name: '치킨', category: '한식/양식', keyword: 'korean crispy fried chicken glazed with spicy sauce delicious food photography' },
-        { name: '피자', category: '양식', keyword: 'delicious pepperoni pizza with melted cheese high quality food photography' },
-        { name: '김치찌개', category: '한식', keyword: 'korean kimchi stew jjigae in a black pot spicy red soup boiling delicious' },
-        { name: '초밥', category: '일식', keyword: 'assorted sushi platter on wooden board fresh salmon tuna delicious food' },
-        { name: '떡볶이', category: '분식', keyword: 'korean spicy rice cake tteokbokki red sauce delicious street food' },
-        { name: '짜장면', category: '중식', keyword: 'korean black bean noodles jajangmyeon with cucumber garnish delicious' },
-        { name: '햄버거', category: '양식', keyword: 'juicy cheeseburger with lettuce tomato and fries high quality food photography' },
-        { name: '파스타', category: '양식', keyword: 'creamy carbonara pasta with bacon and parmesan cheese delicious food' },
-        { name: '된장찌개', category: '한식', keyword: 'korean soybean paste stew doenjang-jjigae with tofu and zucchini' },
-        { name: '족발', category: '한식', keyword: 'korean braised pig trotters jokbal sliced on a plate delicious' },
-        { name: '쌀국수', category: '아시안', keyword: 'vietnamese pho noodle soup with beef and herbs delicious' },
-        { name: '마라탕', category: '중식', keyword: 'spicy malatang soup with vegetables and noodles chinese food' },
-        { name: '칼국수', category: '한식', keyword: 'korean handmade noodle soup kalguksu with clams delicious' },
-        { name: '비빔밥', category: '한식', keyword: 'korean bibimbap mixed rice with vegetables and egg in stone bowl' },
-        { name: '스테이크', category: '양식', keyword: 'grilled ribeye steak medium rare with rosemary and roasted garlic' },
-        { name: '돈가스', category: '일식/양식', keyword: 'golden crispy pork cutlet tonkatsu with shredded cabbage delicious' },
-        { name: '라면', category: '분식', keyword: 'korean spicy ramen noodles with egg and green onion delicious' },
-        { name: '샌드위치', category: '양식', keyword: 'fresh blt sandwich with toasted bread lettuce tomato bacon' },
-        { name: '불고기', category: '한식', keyword: 'korean marinated beef bulgogi bbq with onions and carrots delicious' }
-    ];
-
-    // --- Dark Mode Logic ---
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        body.classList.add('dark-mode');
-        themeToggleBtn.innerText = '☀️'; 
-    } else {
-        themeToggleBtn.innerText = '🌙'; 
-    }
-
-    themeToggleBtn.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        const isDark = body.classList.contains('dark-mode');
-        themeToggleBtn.innerText = isDark ? '☀️' : '🌙';
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    });
-
-    // --- Menu Recommendation Logic ---
-
-    function recommendMenu() {
-        // Random selection
-        const randomIndex = Math.floor(Math.random() * menus.length);
-        const menu = menus[randomIndex];
-
-        // Clear previous content
-        resultContainer.innerHTML = '';
-
-        // Create Card Elements
-        const menuCard = document.createElement('div');
-        menuCard.className = 'menu-card';
-
-        // Image (AI Generated via Pollinations with Flux model)
-        // Using 'flux' model for high realism
-        const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(menu.keyword)}?width=600&height=400&model=flux&nologo=true&seed=${Math.random()}`;
-
-        const img = document.createElement('img');
-        img.src = imgUrl;
-        img.alt = menu.name;
-        img.className = 'menu-image';
-        
-        // Add loading state
-        img.style.opacity = '0';
-        img.onload = () => { img.style.opacity = '1'; img.style.transition = 'opacity 0.3s'; };
-        img.onerror = () => { 
-            img.src = 'https://via.placeholder.com/300x200?text=Image+Generation+Failed'; 
-        };
-
-        // Text Info
-        const nameEl = document.createElement('div');
-        nameEl.className = 'menu-name';
-        nameEl.textContent = menu.name;
-
-        const categoryEl = document.createElement('div');
-        categoryEl.className = 'menu-category';
-        categoryEl.textContent = menu.category;
-
-        // Append to card
-        menuCard.appendChild(img);
-        menuCard.appendChild(nameEl);
-        menuCard.appendChild(categoryEl);
-
-        // Append to container
-        resultContainer.appendChild(menuCard);
-    }
-
-    // --- Button Event Binding ---
-    generateBtn.addEventListener('click', recommendMenu);
-
-    // --- Clock Logic ---
-    function updateClock() {
-        const now = new Date();
-        const options = { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric', 
-            weekday: 'short', 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit',
-            hour12: false
-        };
-        const timeString = now.toLocaleString('ko-KR', options);
-        document.getElementById('clock').innerText = timeString;
-    }
+    // --- Elements ---
+    const screens = {
+        intro: document.getElementById('intro-screen'),
+        quiz: document.getElementById('quiz-screen'),
+        result: document.getElementById('result-screen')
+    };
     
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // --- Custom Comment System (Local Storage) ---
-    const commentForm = {
-        username: document.getElementById('username'),
-        text: document.getElementById('comment-text'),
-        submitBtn: document.getElementById('submit-comment'),
-        list: document.getElementById('comment-list'),
-        count: document.getElementById('comment-count')
+    const ui = {
+        startBtn: document.getElementById('start-btn'),
+        progressFill: document.getElementById('progress-fill'),
+        qNumber: document.getElementById('question-number'),
+        qText: document.getElementById('question-text'),
+        options: document.querySelectorAll('.option-btn'),
+        retryBtn: document.getElementById('retry-btn'),
+        shareBtn: document.getElementById('share-btn'),
+        resultDesc: document.getElementById('result-description')
     };
 
-    // Load comments from LocalStorage
-    let comments = JSON.parse(localStorage.getItem('dinner_comments')) || [];
+    // --- Data: Simplified HEXACO Questions (2 questions per dimension for demo) ---
+    // H: Honesty-Humility, E: Emotionality, X: eXtraversion, A: Agreeableness, C: Conscientiousness, O: Openness
+    const questions = [
+        { id: 1, type: 'H', text: "나는 내 이익을 위해 남을 이용하지 않는다." },
+        { id: 2, type: 'H', text: "나는 사치스러운 물건을 갖고 싶지 않다." },
+        { id: 3, type: 'E', text: "나는 미래에 대해 걱정을 많이 하는 편이다." },
+        { id: 4, type: 'E', text: "나는 감정의 기복이 심한 편이다." },
+        { id: 5, type: 'X', text: "나는 사람들과 어울리는 것을 좋아한다." },
+        { id: 6, type: 'X', text: "나는 활기차고 에너지가 넘친다." },
+        { id: 7, type: 'A', text: "나는 화가 나도 금방 용서하는 편이다." },
+        { id: 8, type: 'A', text: "나는 다른 사람의 의견을 잘 받아들인다." },
+        { id: 9, type: 'C', text: "나는 계획을 세우고 실천하는 것을 좋아한다." },
+        { id: 10, type: 'C', text: "나는 목표를 달성하기 위해 열심히 노력한다." },
+        { id: 11, type: 'O', text: "나는 예술과 자연의 아름다움을 즐긴다." },
+        { id: 12, type: 'O', text: "나는 새로운 아이디어나 지식에 호기심이 많다." }
+    ];
 
-    function renderComments() {
-        commentForm.list.innerHTML = '';
-        commentForm.count.textContent = comments.length;
+    let currentQIndex = 0;
+    let scores = { H: 0, E: 0, X: 0, A: 0, C: 0, O: 0 };
+    let chartInstance = null;
 
-        if (comments.length === 0) {
-            commentForm.list.innerHTML = '<div class="empty-message">첫 번째 댓글을 남겨보세요!</div>';
-            return;
+    // --- Check for Shared Result URL ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedData = urlParams.get('data');
+
+    if (sharedData) {
+        // If URL has data, show result directly
+        try {
+            const decodedScores = JSON.parse(atob(sharedData));
+            scores = decodedScores;
+            showScreen('result');
+            renderChart();
+            ui.resultDesc.innerText = "공유받은 친구의 성격 유형 결과입니다.";
+            ui.shareBtn.style.display = 'none'; // Hide share button when viewing shared result
+        } catch (e) {
+            console.error("Invalid share data");
+        }
+    }
+
+    // --- Navigation ---
+    function showScreen(screenName) {
+        Object.values(screens).forEach(s => s.classList.add('hidden'));
+        screens[screenName].classList.remove('hidden');
+    }
+
+    // --- Quiz Logic ---
+    ui.startBtn.addEventListener('click', () => {
+        resetQuiz();
+        showScreen('quiz');
+        renderQuestion();
+    });
+
+    function resetQuiz() {
+        currentQIndex = 0;
+        scores = { H: 0, E: 0, X: 0, A: 0, C: 0, O: 0 };
+        // Reset URL
+        window.history.pushState({}, document.title, window.location.pathname);
+        ui.shareBtn.style.display = 'block';
+    }
+
+    function renderQuestion() {
+        const q = questions[currentQIndex];
+        ui.qNumber.innerText = `Q${currentQIndex + 1}.`;
+        ui.qText.innerText = q.text;
+        
+        // Update Progress Bar
+        const progress = ((currentQIndex) / questions.length) * 100;
+        ui.progressFill.style.width = `${progress}%`;
+    }
+
+    ui.options.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const score = parseInt(e.target.dataset.score);
+            const type = questions[currentQIndex].type;
+            
+            // Add score
+            scores[type] += score;
+
+            // Next Question
+            currentQIndex++;
+            if (currentQIndex < questions.length) {
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        });
+    });
+
+    function finishQuiz() {
+        showScreen('result');
+        // Normalize scores (Max score per type is 10 (2 questions * 5 points))
+        // Let's scale it to 0-100 for chart
+        // Current max is 10. So multiply by 10.
+        // Actually, let's keep it raw or average.
+        
+        renderChart();
+        ui.resultDesc.innerText = "당신의 HEXACO 성격 유형 분석 결과입니다. 
+각 항목이 균형 잡혀 있는지 확인해보세요!";
+    }
+
+    // --- Chart.js ---
+    function renderChart() {
+        const ctx = document.getElementById('resultChart').getContext('2d');
+        
+        // Data preparation
+        // Each type max score = 10.
+        const dataValues = [
+            scores.H, scores.E, scores.X, scores.A, scores.C, scores.O
+        ];
+
+        if (chartInstance) {
+            chartInstance.destroy();
         }
 
-        // Sort by newest first
-        const sortedComments = [...comments].reverse();
-
-        sortedComments.forEach(comment => {
-            const el = document.createElement('div');
-            el.className = 'comment-item';
-            
-            // Random Emoji Avatar based on name length
-            const emojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯'];
-            const avatarEmoji = emojis[comment.username.length % emojis.length];
-
-            el.innerHTML = `
-                <div class="comment-avatar">${avatarEmoji}</div>
-                <div class="comment-content">
-                    <div class="comment-author">
-                        ${comment.username}
-                        <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
-                    </div>
-                    <div class="comment-text">${comment.text}</div>
-                </div>
-            `;
-            commentForm.list.appendChild(el);
+        chartInstance = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['정직-겸손성(H)', '정서적불안정(E)', '외향성(X)', '원만성(A)', '성실성(C)', '개방성(O)'],
+                datasets: [{
+                    label: '내 성격 점수',
+                    data: dataValues,
+                    fill: true,
+                    backgroundColor: 'rgba(108, 92, 231, 0.2)',
+                    borderColor: 'rgb(108, 92, 231)',
+                    pointBackgroundColor: 'rgb(108, 92, 231)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(108, 92, 231)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        angleLines: { display: true },
+                        suggestedMin: 0,
+                        suggestedMax: 10, // Max possible score
+                        ticks: { stepSize: 2, display: false } // Hide numbers
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
         });
     }
 
-    function addComment() {
-        const username = commentForm.username.value.trim();
-        const text = commentForm.text.value.trim();
+    // --- Share Logic ---
+    ui.shareBtn.addEventListener('click', () => {
+        // Encode scores to base64 string
+        const dataString = btoa(JSON.stringify(scores));
+        const shareUrl = `${window.location.origin}${window.location.pathname}?data=${dataString}`;
 
-        if (!username || !text) {
-            alert('이름과 내용을 모두 입력해주세요.');
-            return;
-        }
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            alert('결과 링크가 복사되었습니다! 친구에게 공유해보세요.');
+        }).catch(err => {
+            console.error('Copy failed', err);
+            prompt("이 링크를 복사하세요:", shareUrl);
+        });
+    });
 
-        const newComment = {
-            id: Date.now(),
-            username: username,
-            text: text,
-            date: new Date().toISOString()
-        };
-
-        comments.push(newComment);
-        localStorage.setItem('dinner_comments', JSON.stringify(comments));
-        
-        // Reset form
-        commentForm.username.value = '';
-        commentForm.text.value = '';
-        
-        renderComments();
-    }
-
-    commentForm.submitBtn.addEventListener('click', addComment);
-    
-    // Initial Render
-    renderComments();
+    ui.retryBtn.addEventListener('click', () => {
+        resetQuiz();
+        showScreen('intro');
+    });
 });

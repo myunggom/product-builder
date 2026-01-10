@@ -3,50 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>오늘 저녁 뭐 먹지?</title>
+    <title>HEXACO 성격 진단</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <!-- Dark Mode Toggle Button -->
-        <button id="theme-toggle" class="theme-toggle" aria-label="테마 변경">🌙</button>
+        <!-- Intro Screen -->
+        <section id="intro-screen" class="screen active">
+            <header>
+                <h1>🧠 HEXACO<br>성격 유형 진단</h1>
+                <p>나의 성격을 6가지 차원에서 분석하고<br>친구들에게 결과를 공유해보세요.</p>
+            </header>
+            <div class="illustration">🔮</div>
+            <button id="start-btn" class="primary-btn">진단 시작하기</button>
+        </section>
 
-        <header>
-            <h1>🍽️ 오늘 저녁 뭐 먹지?</h1>
-            <p>고민하지 말고 버튼을 눌러보세요!</p>
-        </header>
+        <!-- Quiz Screen -->
+        <section id="quiz-screen" class="screen hidden">
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div class="question-container">
+                <span id="question-number" class="q-number">Q1.</span>
+                <h2 id="question-text">질문 내용이 여기에 표시됩니다.</h2>
+            </div>
+            <div class="options-container">
+                <button class="option-btn" data-score="1">전혀 그렇지 않다</button>
+                <button class="option-btn" data-score="2">그렇지 않다</button>
+                <button class="option-btn" data-score="3">보통이다</button>
+                <button class="option-btn" data-score="4">그렇다</button>
+                <button class="option-btn" data-score="5">매우 그렇다</button>
+            </div>
+        </section>
 
-        <main>
-            <div id="result-container" class="result-container">
-                <div class="placeholder-text">버튼을 눌러 메뉴를 추천받으세요</div>
+        <!-- Result Screen -->
+        <section id="result-screen" class="screen hidden">
+            <header>
+                <h2>나의 HEXACO 프로필</h2>
+                <p>당신의 성격 분석 결과입니다.</p>
+            </header>
+            
+            <div class="chart-container">
+                <canvas id="resultChart"></canvas>
             </div>
 
-            <button id="generate-btn" class="generate-btn">메뉴 추천받기</button>
-            <div id="clock" class="clock"></div>
-        </main>
+            <div id="result-description" class="result-desc">
+                <!-- Descriptions injected by JS -->
+            </div>
 
-        <footer>
-            <p>&copy; 2026 Dinner Menu Recommender</p>
-        </footer>
-    </div>
-
-    <!-- Custom Comment System -->
-    <div class="comments-section">
-        <h3 class="comments-title">댓글 <span id="comment-count">0</span></h3>
-        
-        <div class="comment-form">
-            <input type="text" id="username" class="form-input" placeholder="닉네임" maxlength="10">
-            <textarea id="comment-text" class="form-textarea" placeholder="이 메뉴 어때요? 의견을 남겨주세요!" rows="3"></textarea>
-            <button id="submit-comment" class="submit-btn">등록</button>
-        </div>
-
-        <div id="comment-list" class="comment-list">
-            <!-- Comments will be injected here via JS -->
-        </div>
+            <div class="action-buttons">
+                <button id="share-btn" class="primary-btn share-btn">🔗 결과 링크 복사하기</button>
+                <button id="retry-btn" class="secondary-btn">다시 하기</button>
+            </div>
+        </section>
     </div>
 
     <script src="main.js"></script>
