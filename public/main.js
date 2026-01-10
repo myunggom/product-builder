@@ -71,9 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Let's use `https://image.pollinations.ai/prompt/${keyword}` for AI generated food images 
         // or standard Unsplash source `https://source.unsplash.com/featured/?${keyword}` (Note: Unsplash Source is being deprecated).
-        // Let's use `https://loremflickr.com` for reliability.
-        
-        const imgUrl = `https://loremflickr.com/300/200/${encodeURIComponent(menu.keyword)},food/all?lock=${Math.random()}`; 
+        // Let's use `https://image.pollinations.ai` for reliable AI-generated food images.
+        // This ensures an image is always returned for the given keyword.
+        const imgUrl = `https://image.pollinations.ai/prompt/delicious ${encodeURIComponent(menu.keyword)} food photo?width=600&height=400&nologo=true&seed=${Math.random()}`;
 
         const img = document.createElement('img');
         img.src = imgUrl;
