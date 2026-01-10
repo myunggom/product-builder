@@ -81,7 +81,13 @@
             <div class="action-buttons">
                 <button id="compare-btn" class="compare-btn">🆚 친구와 결과 비교하기 (초대장 보내기)</button>
                 <button id="share-btn" class="primary-btn share-btn">🔗 내 결과만 공유하기</button>
-                <button id="save-img-btn" class="secondary-btn" style="background:#55efc4; color:#2d3436; border:none; margin-top:5px;">📸 결과 이미지로 저장하기</button>
+                <div class="save-actions-container" style="display:flex; flex-direction:column; gap:5px; margin-top:5px;">
+                    <button id="show-save-options-btn" class="secondary-btn" style="background:#55efc4; color:#2d3436; border:none;">📸 결과 이미지 저장/복사</button>
+                    <div id="save-options" class="save-options">
+                        <button id="save-file-btn" class="save-option-btn">📂 파일로 저장</button>
+                        <button id="copy-img-btn" class="save-option-btn">📋 클립보드 복사</button>
+                    </div>
+                </div>
                 <button id="retry-btn" class="secondary-btn">처음부터 다시 하기</button>
             </div>
         </section>

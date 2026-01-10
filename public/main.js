@@ -315,30 +315,68 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = window.location.pathname; // Hard reset
     });
 
-    // --- Save as Image ---
-    const saveBtn = document.getElementById('save-img-btn');
-    saveBtn.addEventListener('click', () => {
-        // Simple and robust: Use browser's print to PDF/Save feature or Canvas export
-        // For mobile compatibility, html2canvas is heavy. 
-        // Let's try to export the Chart + Text as an image using html2canvas if available, 
-        // otherwise fallback to Chart image download.
-        
-        // Since I haven't added html2canvas yet, I will use a simple Chart download for now
-        // and guide the user.
-        
-        // UPDATE: I will inject html2canvas dynamically to ensure it works.
-        const script = document.createElement('script');
-        script.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js";
-        script.onload = () => {
-            const target = document.querySelector('.container');
-            html2canvas(target).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'hexaco_result.png';
-                link.href = canvas.toDataURL();
-                link.click();
+    // --- Save Image Logic ---
+    const showSaveOptionsBtn = document.getElementById('show-save-options-btn');
+    const saveOptionsDiv = document.getElementById('save-options');
+    const saveFileBtn = document.getElementById('save-file-btn');
+    const copyImgBtn = document.getElementById('copy-img-btn');
+
+    // Load html2canvas immediately to be ready
+    const script = document.createElement('script');
+    script.src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js";
+    document.head.appendChild(script);
+
+    showSaveOptionsBtn.addEventListener('click', () => {
+        saveOptionsDiv.classList.toggle('visible');
+    });
+
+    function captureResult(callback) {
+        const target = document.querySelector('.container');
+        // Temporarily hide buttons for clean capture
+        const buttons = document.querySelector('.action-buttons');
+        const themeBtn = document.getElementById('theme-toggle');
+        buttons.style.display = 'none';
+        themeBtn.style.display = 'none';
+
+        html2canvas(target, { 
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-color') 
+        }).then(canvas => {
+            // Restore buttons
+            buttons.style.display = 'flex';
+            themeBtn.style.display = 'block';
+            callback(canvas);
+        }).catch(err => {
+            buttons.style.display = 'flex';
+            themeBtn.style.display = 'block';
+            alert("이미지 생성 중 오류가 발생했습니다.");
+        });
+    }
+
+    saveFileBtn.addEventListener('click', () => {
+        captureResult((canvas) => {
+            const link = document.createElement('a');
+            link.download = 'hexaco_result.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    });
+
+    copyImgBtn.addEventListener('click', () => {
+        captureResult((canvas) => {
+            canvas.toBlob(blob => {
+                try {
+                    const item = new ClipboardItem({ 'image/png': blob });
+                    navigator.clipboard.write([item]).then(() => {
+                        alert("이미지가 클립보드에 복사되었습니다! \n메신저나 문서에 붙여넣기(Ctrl+V) 하세요.");
+                    }).catch(err => {
+                        console.error(err);
+                        alert("이 브라우저는 이미지 복사를 지원하지 않거나 권한이 없습니다. '파일로 저장'을 이용해주세요.");
+                    });
+                } catch (err) {
+                    alert("이 브라우저에서는 클립보드 복사를 지원하지 않습니다.");
+                }
             });
-        };
-        document.head.appendChild(script);
+        });
     });
 
     // --- Dark Mode ---
