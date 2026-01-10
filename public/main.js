@@ -247,13 +247,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = document.getElementById('resultChart').getContext('2d');
         const labels = ['정직(H)', '정서(E)', '외향(X)', '원만(A)', '성실(C)', '개방(O)'];
         
+        // Check Theme for Colors
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || 
+                       (!document.documentElement.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        
+        const textColor = isDark ? '#f5f6fa' : '#2d3436';
+        const gridColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+
         const datasets = [{
             label: '나',
             data: Object.values(myScores),
             fill: true,
             backgroundColor: 'rgba(108, 92, 231, 0.4)',
             borderColor: 'rgb(108, 92, 231)',
-            pointBackgroundColor: 'rgb(108, 92, 231)'
+            pointBackgroundColor: 'rgb(108, 92, 231)',
+            pointBorderColor: isDark ? '#fff' : '#fff', // White border for contrast
         }];
 
         // Add Friend's Dataset if exists
@@ -264,7 +272,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 fill: true,
                 backgroundColor: 'rgba(253, 121, 168, 0.4)',
                 borderColor: 'rgb(253, 121, 168)',
-                pointBackgroundColor: 'rgb(253, 121, 168)'
+                pointBackgroundColor: 'rgb(253, 121, 168)',
+                pointBorderColor: isDark ? '#fff' : '#fff',
             });
         }
 
@@ -277,9 +286,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 responsive: true,
                 scales: {
                     r: {
-                        angleLines: { display: true },
+                        angleLines: { display: true, color: gridColor },
+                        grid: { color: gridColor },
+                        pointLabels: {
+                            color: textColor,
+                            font: { size: 13, family: "'Pretendard', sans-serif", weight: 'bold' }
+                        },
                         suggestedMin: 0, suggestedMax: 20,
-                        ticks: { display: false }
+                        ticks: { display: false, backdropColor: 'transparent' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: textColor, font: { family: "'Pretendard', sans-serif" } }
                     }
                 }
             }
@@ -403,6 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.setAttribute('data-theme', 'dark');
             themeBtn.innerText = '☀️';
             localStorage.setItem('theme', 'dark');
+        }
+        
+        // Re-render chart to update colors
+        if (!screens.result.classList.contains('hidden')) {
+            renderChart();
         }
     });
 });
