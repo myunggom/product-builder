@@ -33,7 +33,6 @@ body {
     color: var(--text-main);
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
     padding: 20px;
     transition: background-color 0.3s, color 0.3s;
@@ -42,7 +41,7 @@ body {
 .container {
     background: var(--card-bg);
     width: 100%;
-    max-width: 480px;
+    max-width: 600px; /* 넓이 확장 */
     min-height: 600px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -50,18 +49,20 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; Removed for scrolling long results */
     transition: background-color 0.3s;
+    margin-bottom: 20px;
 }
 
 .screen {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Changed for long content */
     height: 100%;
     flex: 1;
     animation: fadeIn 0.4s ease-out;
+    width: 100%;
 }
 
 .screen.hidden {
@@ -74,6 +75,10 @@ body {
 }
 
 /* Intro Screen */
+#intro-screen {
+    justify-content: center; /* Intro는 중앙 정렬 */
+}
+
 header {
     text-align: center;
     margin-bottom: 30px;
@@ -136,6 +141,10 @@ p {
 }
 
 /* Quiz Screen */
+#quiz-screen {
+    justify-content: center;
+}
+
 .progress-bar {
     width: 100%;
     height: 6px;
@@ -155,10 +164,7 @@ p {
 .question-container {
     text-align: center;
     margin-bottom: 40px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 100%;
 }
 
 .q-number {
@@ -188,24 +194,63 @@ p {
     color: white;
 }
 
-/* Result Screen */
+/* Result Screen - Detailed for AdSense */
 .chart-container {
     width: 100%;
-    max-width: 400px; /* Chart.js Responsive limit */
+    max-width: 400px;
     margin: 20px 0;
     position: relative;
+    flex-shrink: 0;
 }
 
-.result-desc {
-    font-size: 0.9rem;
-    color: var(--text-sub);
-    text-align: center;
-    margin-bottom: 30px;
+.result-detail-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.result-section {
     background: var(--bg-color);
-    padding: 15px;
-    border-radius: 12px;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.result-section h3 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.result-section p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.score-badge {
+    font-size: 0.9rem;
+    background: var(--card-bg);
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: var(--text-main);
+    border: 1px solid var(--text-sub);
 }
 
 .action-buttons {
     width: 100%;
+    margin-top: 20px;
+}
+
+/* Footer Link */
+footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+footer a {
+    color: var(--text-sub);
+    text-decoration: none;
 }
