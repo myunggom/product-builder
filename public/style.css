@@ -1,11 +1,9 @@
 :root {
-    --primary-color: #4a90e2;
+    --primary-color: #ff6b6b; /* Appetite stimulating color */
     --bg-color: #f4f7f6;
     --card-bg: #ffffff;
     --text-main: #333333;
     --text-sub: #777777;
-    --ball-shadow: rgba(0,0,0,0.1);
-    --ball-text-shadow: rgba(0,0,0,0.2);
     --row-bg: #f9f9f9;
 }
 
@@ -14,8 +12,6 @@ body.dark-mode {
     --card-bg: #2d2d2d;
     --text-main: #ffffff;
     --text-sub: #bbbbbb;
-    --ball-shadow: rgba(0,0,0,0.3);
-    --ball-text-shadow: rgba(0,0,0,0.5);
     --row-bg: #333333;
 }
 
@@ -76,27 +72,51 @@ header p {
 
 .result-container {
     margin: 20px 0;
-    min-height: 250px;
+    min-height: 250px; /* Space for image + text */
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
 .placeholder-text {
     color: var(--text-sub);
     opacity: 0.5;
-    margin-top: 100px;
 }
 
-.lotto-row {
+/* Menu Display Styles */
+.menu-card {
     display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px;
-    background: var(--row-bg);
-    border-radius: 50px;
-    animation: fadeIn 0.4s ease-out forwards;
-    transition: background-color 0.3s ease;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: fadeIn 0.5s ease-out forwards;
+    width: 100%;
+}
+
+.menu-image {
+    width: 100%;
+    max-width: 300px; /* Limit image size */
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.menu-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-main);
+    margin-top: 5px;
+}
+
+.menu-category {
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    background-color: var(--row-bg);
+    padding: 4px 12px;
+    border-radius: 20px;
 }
 
 @keyframes fadeIn {
@@ -104,29 +124,10 @@ header p {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.ball {
-    width: 36px;
-    height: 36px;
-    line-height: 36px;
-    border-radius: 50%;
-    color: white;
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-shadow: 0 1px 2px var(--ball-text-shadow);
-    box-shadow: 0 2px 4px var(--ball-shadow);
-}
-
-/* 로또 공 색상 규격 */
-.range-1 { background: #fbc400; }  /* 1~10 */
-.range-11 { background: #69c8f2; } /* 11~20 */
-.range-21 { background: #ff7272; } /* 21~30 */
-.range-31 { background: #aaaaaa; } /* 31~40 */
-.range-41 { background: #b0d840; } /* 41~45 */
-
 .generate-btn {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #4a90e2, #6e8efb);
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
     color: white;
     border: none;
     border-radius: 12px;
@@ -134,12 +135,12 @@ header p {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
 
 .generate-btn:active {
     transform: scale(0.97);
-    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
 }
 
 /* Clock Style */
@@ -158,13 +159,7 @@ footer {
     opacity: 0.7;
 }
 
-/* 모바일 대응: 작은 화면에서 공 크기 조절 */
 @media (max-width: 375px) {
-    .ball {
-        width: 32px;
-        height: 32px;
-        line-height: 32px;
-        font-size: 0.8rem;
-    }
     .container { padding: 1.5rem; }
+    .menu-name { font-size: 1.3rem; }
 }

@@ -4,75 +4,108 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggleBtn = document.getElementById('theme-toggle');
     const body = document.body;
 
+    // --- Menu Data with Placeholder Images (Unsplash Source API) ---
+    // Using source.unsplash.com with specific keywords to get relevant images
+    const menus = [
+        { name: '삼겹살', category: '한식', keyword: 'pork belly bbq' },
+        { name: '치킨', category: '한식/양식', keyword: 'fried chicken' },
+        { name: '피자', category: '양식', keyword: 'pizza' },
+        { name: '김치찌개', category: '한식', keyword: 'kimchi stew' },
+        { name: '초밥', category: '일식', keyword: 'sushi' },
+        { name: '떡볶이', category: '분식', keyword: 'tteokbokki' },
+        { name: '짜장면', category: '중식', keyword: 'black bean noodles' },
+        { name: '햄버거', category: '양식', keyword: 'hamburger' },
+        { name: '파스타', category: '양식', keyword: 'pasta' },
+        { name: '된장찌개', category: '한식', keyword: 'soybean paste stew' },
+        { name: '족발', category: '한식', keyword: 'pork feet' },
+        { name: '쌀국수', category: '아시안', keyword: 'pho' },
+        { name: '마라탕', category: '중식', keyword: 'malatang' },
+        { name: '칼국수', category: '한식', keyword: 'noodle soup' },
+        { name: '비빔밥', category: '한식', keyword: 'bibimbap' },
+        { name: '스테이크', category: '양식', keyword: 'steak' },
+        { name: '돈가스', category: '일식/양식', keyword: 'pork cutlet' },
+        { name: '라면', category: '분식', keyword: 'ramen' },
+        { name: '샌드위치', category: '양식', keyword: 'sandwich' },
+        { name: '불고기', category: '한식', keyword: 'bulgogi' }
+    ];
+
     // --- Dark Mode Logic ---
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
         body.classList.add('dark-mode');
-        themeToggleBtn.innerText = '☀️'; // Switch to sun icon for dark mode
+        themeToggleBtn.innerText = '☀️'; 
     } else {
-        themeToggleBtn.innerText = '🌙'; // Moon icon for light mode
+        themeToggleBtn.innerText = '🌙'; 
     }
 
     themeToggleBtn.addEventListener('click', () => {
         body.classList.toggle('dark-mode');
         const isDark = body.classList.contains('dark-mode');
-        
-        // Update icon
         themeToggleBtn.innerText = isDark ? '☀️' : '🌙';
-        
-        // Save preference
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 
+    // --- Menu Recommendation Logic ---
 
-    // --- Lotto Logic ---
+    function recommendMenu() {
+        // Random selection
+        const randomIndex = Math.floor(Math.random() * menus.length);
+        const menu = menus[randomIndex];
 
-    // 1. 공 색상 대역 결정 함수
-    function getBallClass(num) {
-        if (num <= 10) return 'range-1';
-        if (num <= 20) return 'range-11';
-        if (num <= 30) return 'range-21';
-        if (num <= 40) return 'range-31';
-        return 'range-41';
-    }
-
-    // 2. 로또 번호 생성 로직 (1~45 중 6개 중복없이)
-    function generateSingleGame() {
-        const numbers = new Set();
-        while (numbers.size < 6) {
-            numbers.add(Math.floor(Math.random() * 45) + 1);
-        }
-        return [...numbers].sort((a, b) => a - b);
-    }
-
-    // 3. 화면 출력 함수
-    function displayLotto() {
-        // 기존 내용 삭제
+        // Clear previous content
         resultContainer.innerHTML = '';
 
-        // 5게임 반복 생성
-        for (let i = 0; i < 5; i++) {
-            const numbers = generateSingleGame();
-            const row = document.createElement('div');
-            row.className = 'lotto-row';
+        // Create Card Elements
+        const menuCard = document.createElement('div');
+        menuCard.className = 'menu-card';
 
-            numbers.forEach(num => {
-                const ball = document.createElement('div');
-                ball.className = `ball ${getBallClass(num)}`;
-                ball.innerText = num;
-                row.appendChild(ball);
-            });
+        // Image
+        // Using a reliable placeholder service since Unsplash source is deprecated/unreliable
+        // We will use a keyword search URL if possible or a static placeholder style
+        // Modern approach: Use a specific image URL or a keyword-based service
+        // For this demo, I will use a keyword based URL from 'pollinations.ai' or similar for variety, 
+        // OR standard unsplash source if it still works for keywords, but let's use a safer generated URL pattern.
+        // Actually, let's use a specialized food placeholder service or construct a query string.
+        
+        // Let's use `https://image.pollinations.ai/prompt/${keyword}` for AI generated food images 
+        // or standard Unsplash source `https://source.unsplash.com/featured/?${keyword}` (Note: Unsplash Source is being deprecated).
+        // Let's use `https://loremflickr.com` for reliability.
+        
+        const imgUrl = `https://loremflickr.com/300/200/${encodeURIComponent(menu.keyword)},food/all?lock=${Math.random()}`; 
 
-            resultContainer.appendChild(row);
-        }
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.alt = menu.name;
+        img.className = 'menu-image';
+        
+        // Add loading state
+        img.style.opacity = '0';
+        img.onload = () => { img.style.opacity = '1'; img.style.transition = 'opacity 0.3s'; };
+
+        // Text Info
+        const nameEl = document.createElement('div');
+        nameEl.className = 'menu-name';
+        nameEl.textContent = menu.name;
+
+        const categoryEl = document.createElement('div');
+        categoryEl.className = 'menu-category';
+        categoryEl.textContent = menu.category;
+
+        // Append to card
+        menuCard.appendChild(img);
+        menuCard.appendChild(nameEl);
+        menuCard.appendChild(categoryEl);
+
+        // Append to container
+        resultContainer.appendChild(menuCard);
     }
 
-    // 4. 버튼 이벤트 바인딩
-    generateBtn.addEventListener('click', displayLotto);
+    // --- Button Event Binding ---
+    generateBtn.addEventListener('click', recommendMenu);
 
-    // 5. 시계 기능
+    // --- Clock Logic ---
     function updateClock() {
         const now = new Date();
         const options = { 
@@ -89,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('clock').innerText = timeString;
     }
     
-    // 초기 실행 및 1초마다 갱신
     updateClock();
     setInterval(updateClock, 1000);
 });
