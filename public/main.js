@@ -49,12 +49,42 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const interpretations = {
-        H: { title: "정직-겸손성", high: "솔직하고 겸손한 성격입니다.", low: "자신의 이익을 우선시할 수 있습니다." },
-        E: { title: "정서적 불안정성", high: "감수성이 풍부하고 공감 능력이 뛰어납니다.", low: "침착하고 스트레스에 강합니다." },
-        X: { title: "외향성", high: "사교적이고 에너지가 넘칩니다.", low: "차분하고 독립적인 성격입니다." },
-        A: { title: "원만성", high: "타인에게 관대하고 협조적입니다.", low: "주장이 강하고 비판적일 수 있습니다." },
-        C: { title: "성실성", high: "체계적이고 목표 지향적입니다.", low: "즉흥적이고 유연한 사고를 가졌습니다." },
-        O: { title: "개방성", high: "창의적이고 호기심이 많습니다.", low: "현실적이고 전통을 중시합니다." }
+        H: {
+            title: "정직-겸손성",
+            low: "자신의 이익을 위해 규범을 어기거나 남을 이용하는 것을 주저하지 않을 수 있습니다. 성공과 지위를 중요하게 생각합니다.",
+            mid: "상황에 따라 융통성을 발휘합니다. 기본적으로 정직하려 하지만, 큰 손해를 보면서까지 원칙을 고수하지는 않습니다.",
+            high: "정직과 진실성을 인생의 최우선 가치로 둡니다. 당장의 이익보다는 도덕적 원칙을 지키는 것을 중요하게 생각합니다."
+        },
+        E: {
+            title: "정서적 불안정성",
+            low: "스트레스 상황에서도 침착함을 유지합니다. 감정 기복이 적고 담대한 편이지만, 타인의 감정에 둔감할 수 있습니다.",
+            mid: "일반적인 상황에서는 침착하지만, 큰 스트레스 상황에서는 불안감을 느낄 수 있습니다. 적당한 감수성을 지녔습니다.",
+            high: "감수성이 풍부하고 타인의 감정에 깊이 공감합니다. 걱정이 많거나 쉽게 불안해질 수 있어 정서적 지지가 필요합니다."
+        },
+        X: {
+            title: "외향성",
+            low: "혼자만의 시간에서 에너지를 얻습니다. 조용하고 차분하며, 깊이 있는 관계를 선호합니다.",
+            mid: "사람들과 어울리는 것도 좋지만, 가끔은 혼자만의 시간도 필요합니다. 상황에 따라 리더와 팔로워 역할을 오갑니다.",
+            high: "사람들 속에 있을 때 에너지가 넘칩니다. 활발하고 사교적이며, 모임의 분위기를 주도하는 것을 좋아합니다."
+        },
+        A: {
+            title: "원만성",
+            low: "자신의 주장이 뚜렷하고 비판적입니다. 갈등 상황에서 물러서지 않으며, 때로는 다소 공격적으로 보일 수 있습니다.",
+            mid: "대체로 원만하지만, 불합리한 상황에서는 화를 내거나 단호하게 대처합니다. 균형 잡힌 대인관계를 유지합니다.",
+            high: "타인을 잘 용서하고 이해심이 넓습니다. 다툼을 싫어하며, 손해를 보더라도 양보하여 평화를 지키려 노력합니다."
+        },
+        C: {
+            title: "성실성",
+            low: "즉흥적이고 자유로운 영혼입니다. 계획보다는 기분과 상황에 따라 움직이며, 정리정돈보다는 창의적 혼돈을 즐깁니다.",
+            mid: "기본적인 책임감은 있지만, 너무 빡빡한 계획보다는 어느 정도의 여유를 선호합니다. 일과 휴식의 균형을 찾습니다.",
+            high: "매우 꼼꼼하고 계획적입니다. 목표를 세우면 끝까지 완수하며, 체계적이고 질서 정연한 환경을 선호합니다."
+        },
+        O: {
+            title: "개방성",
+            low: "익숙하고 편안한 것을 선호합니다. 현실적이고 실용적인 사고를 하며, 급격한 변화보다는 안정을 추구합니다.",
+            mid: "새로운 것에 호기심은 있지만, 너무 파격적인 것은 경계합니다. 전통과 혁신 사이에서 균형을 유지합니다.",
+            high: "새로운 경험과 지식을 끊임없이 탐구합니다. 독창적이고 예술적인 감각이 뛰어나며, 남들과 다른 생각을 즐깁니다."
+        }
     };
 
     let currentQIndex = 0;
@@ -189,12 +219,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const keys = ['H', 'E', 'X', 'A', 'C', 'O'];
         keys.forEach(key => {
             const score = myScores[key];
-            const isHigh = score >= 12;
-            const text = isHigh ? interpretations[key].high : interpretations[key].low;
+            let level = "";
+            let text = "";
+
+            if (score <= 9) {
+                level = "낮음";
+                text = interpretations[key].low;
+            } else if (score <= 14) {
+                level = "보통";
+                text = interpretations[key].mid;
+            } else {
+                level = "높음";
+                text = interpretations[key].high;
+            }
             
+            // Badge style adjustment for levels
+            let badgeColor = "#636e72"; // Default gray
+            if (level === "높음") badgeColor = "#6c5ce7";
+            else if (level === "보통") badgeColor = "#0984e3";
+            else badgeColor = "#d63031";
+
             const div = document.createElement('div');
             div.className = 'result-section';
-            div.innerHTML = `<h3>${interpretations[key].title} <span class="score-badge">${score}점</span></h3><p>${text}</p>`;
+            div.innerHTML = `<h3>${interpretations[key].title} <span class="score-badge" style="background:${badgeColor}; color:white; border:none;">${score}점 (${level})</span></h3><p>${text}</p>`;
             ui.resultDetail.appendChild(div);
         });
     }
