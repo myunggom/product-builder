@@ -268,16 +268,64 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.resultDetail.innerHTML = '';
         const keys = ['H', 'E', 'X', 'A', 'C', 'O'];
         
-        // Calculate Compatibility
+        // --- 1. Calculate Compatibility & Stats ---
         let totalDiff = 0;
-        keys.forEach(k => totalDiff += Math.abs(myScores[k] - friendScores[k]));
-        const matchRate = Math.max(0, 100 - (totalDiff * 2)); 
+        let minDiff = Infinity;
+        let maxDiff = -1;
+        let bestMatchTrait = '';
+        let biggestGapTrait = '';
+
+        keys.forEach(k => {
+            const diff = Math.abs(myScores[k] - friendScores[k]);
+            totalDiff += diff;
+            
+            if (diff < minDiff) {
+                minDiff = diff;
+                bestMatchTrait = interpretations[k].title;
+            }
+            if (diff > maxDiff) {
+                maxDiff = diff;
+                biggestGapTrait = interpretations[k].title;
+            }
+        });
         
+        const matchRate = Math.max(0, 100 - (totalDiff * 2)); 
+
+        // --- 2. Determine Archetype ---
+        let archetypeTitle = "";
+        let archetypeDesc = "";
+        
+        if (matchRate >= 90) {
+            archetypeTitle = "💖 영혼의 단짝 (Soulmates)";
+            archetypeDesc = "두 분은 마치 거울을 보는 것처럼 닮아있네요! 서로의 생각과 가치관이 거의 일치하여 눈빛만 봐도 통하는 사이입니다.";
+        } else if (matchRate >= 70) {
+            archetypeTitle = "✨ 환상의 파트너 (Fantastic Partners)";
+            archetypeDesc = "아주 높은 싱크로율을 자랑합니다. 비슷한 가치관을 공유하면서도 약간의 다른 매력이 있어 서로에게 좋은 자극이 됩니다.";
+        } else if (matchRate >= 50) {
+            archetypeTitle = "⚖️ 상호 보완적인 관계 (Complementary)";
+            archetypeDesc = "비슷한 점과 다른 점이 조화롭게 섞여 있습니다. 서로의 부족한 점을 채워주며 함께 성장할 수 있는 건강한 관계입니다.";
+        } else if (matchRate >= 30) {
+            archetypeTitle = "🧩 서로 다른 매력 (Different Charms)";
+            archetypeDesc = "서로 세상을 바라보는 관점이 꽤 다르군요! 나의 생각과는 다른 친구의 시각이 신선한 충격과 재미를 줄 수 있습니다.";
+        } else {
+            archetypeTitle = "⚡ 정반대의 끌림 (Opposites Attract)";
+            archetypeDesc = "자석의 N극과 S극처럼 정반대의 성향을 가졌습니다. 서로 이해하기 힘들 수도 있지만, 내가 가지지 못한 모습에 강렬하게 끌릴 수도 있습니다.";
+        }
+
+        // --- 3. Render Summary Section ---
         const summary = document.createElement('div');
         summary.className = 'result-section';
         summary.style.background = 'linear-gradient(135deg, #fd79a8, #e84393)';
         summary.style.color = 'white';
-        summary.innerHTML = `<h3 style="color:white; margin-bottom:5px;">💖 우리 궁합 점수: ${Math.round(matchRate)}점</h3><p>두 분의 성격 케미를 분석해봤어요!</p>`;
+        summary.innerHTML = `
+            <h3 style="color:white; margin-bottom:10px; font-size:1.3rem;">${archetypeTitle}</h3>
+            <p style="margin-bottom:15px; font-weight:bold;">궁합 점수: ${Math.round(matchRate)}점</p>
+            <p style="margin-bottom:15px; line-height:1.6;">${archetypeDesc}</p>
+            <div style="background:rgba(255,255,255,0.2); padding:10px; border-radius:10px; margin-top:10px;">
+                <p><strong>🤝 찰떡 포인트:</strong> ${bestMatchTrait} (차이 ${minDiff}점)</p>
+                <p><strong>⚡ 반전 포인트:</strong> ${biggestGapTrait} (차이 ${maxDiff}점)</p>
+            </div>
+        `;
         ui.resultDetail.appendChild(summary);
 
         // Comparison Insights Logic
