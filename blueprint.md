@@ -32,6 +32,7 @@ Configured for **Cloudflare Pages** deployment with the build output directory s
 ## Changelog
 
 *   **2026-01-11**:
+    *   **Bug Fix**: Restored the missing theme toggle button by correctly placing it inside the main navigation bar.
     *   **AdSense Compliance Update**: Added a global navigation bar (`.main-nav`) to `index.html` and `privacy.html`.
     *   **UI Polish**: Renamed "파일로 저장" to "이미지 저장". Integrated the theme toggle button into the main navigation bar for better accessibility and layout.
     *   **Style Update**: Updated `style.css` to support the fixed navigation bar and positioned the theme toggle button within it.
