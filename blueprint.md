@@ -32,6 +32,8 @@ Configured for **Cloudflare Pages** deployment with the build output directory s
 ## Changelog
 
 *   **2026-01-11**:
+    *   **AdSense Compliance Update**: Added a detailed "About HEXACO" section to the intro screen to satisfy publisher content requirements.
+    *   **Feature Update**: Expanded result interpretations to 5 levels (Very Low, Low, Average, High, Very High) for more precise and diverse personality analysis.
     *   **Bug Fix**: Restored the missing theme toggle button by correctly placing it inside the main navigation bar.
     *   **AdSense Compliance Update**: Added a global navigation bar (`.main-nav`) to `index.html` and `privacy.html`.
     *   **UI Polish**: Renamed "파일로 저장" to "이미지 저장". Integrated the theme toggle button into the main navigation bar for better accessibility and layout.
