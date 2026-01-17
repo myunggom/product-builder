@@ -17,6 +17,7 @@ This project is a web-based HEXACO personality assessment tool. It allows users 
 *   **Shareability:** Results are encoded in the URL, allowing users to share their specific personality graph by simply copying the link.
 *   **Responsive Design:** Fully optimized for mobile and desktop experiences.
 *   **Dark Mode:** Automatic system-based dark mode support.
+*   **Analytics:** Integrated Google Analytics (GA4) for tracking user engagement.
 
 ## Project Structure
 
@@ -31,6 +32,8 @@ Configured for **Cloudflare Pages** deployment with the build output directory s
 
 ## Changelog
 
+*   **2026-01-17**:
+    *   **Analytics Integration**: Added Google Analytics (GA4) tracking code to `index.html` and `privacy.html`.
 *   **2026-01-11**:
     *   **AdSense Compliance Update**: Added a detailed "About HEXACO" section to the intro screen to satisfy publisher content requirements.
     *   **Feature Update**: Expanded result interpretations to 5 levels (Very Low, Low, Average, High, Very High) for more precise and diverse personality analysis.
